@@ -5,7 +5,7 @@
 <title>Team To-Do App</title>
 
 <style>
-    * {
+     {
         box-sizing: border-box;
         font-family: 'Segoe UI', sans-serif;
     }
@@ -117,7 +117,7 @@ function addTask() {
     li.innerHTML = `
         <span onclick="toggleTask(this)">${taskText}</span>
         <button class="delete" onclick="deleteTask(this)">X</button>
-    `;
+    ;
 
     document.getElementById("taskList").appendChild(li);
     input.value = "";
