@@ -104,32 +104,70 @@
 </div>
 
 <script>
+function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll('#taskList li').forEach(li => {
+        const span = li.querySelector('span');
+        const isCompleted = li.classList.contains('completed');
+        tasks.push({
+            text: span.textContent,
+            completed: isCompleted
+        });
+    });
+    localStorage.setItem('teamTasks', JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const saved = localStorage.getItem('teamTasks');
+    if (saved) {
+        const tasks = JSON.parse(saved);
+        const taskList = document.getElementById('taskList');
+        tasks.forEach(task => {
+            let li = document.createElement('li');
+            if (task.completed) {
+                li.classList.add('completed');
+            }
+            li.innerHTML = `
+                <span onclick="toggleTask(this)">${task.text}</span>
+                <button class="delete" onclick="deleteTask(this)">X</button>
+            `;
+            taskList.appendChild(li);
+        });
+    }
+}
+
 function addTask() {
-    let input = document.getElementById("taskInput");
+    let input = document.getElementById('taskInput');
     let taskText = input.value.trim();
 
-    if (taskText === "") {
-        alert("Please enter a task");
+    if (taskText === '') {
+        alert('Please enter a task');
         return;
     }
 
-    let li = document.createElement("li");
+    let li = document.createElement('li');
     li.innerHTML = `
         <span onclick="toggleTask(this)">${taskText}</span>
         <button class="delete" onclick="deleteTask(this)">X</button>
-    ;
+    `;
 
-    document.getElementById("taskList").appendChild(li);
-    input.value = "";
+    document.getElementById('taskList').appendChild(li);
+    input.value = '';
+    saveTasks();
 }
 
 function deleteTask(btn) {
     btn.parentElement.remove();
+    saveTasks();
 }
 
 function toggleTask(task) {
-    task.parentElement.classList.toggle("completed");
+    task.parentElement.classList.toggle('completed');
+    saveTasks();
 }
+
+// Load tasks on page load
+window.onload = loadTasks;
 </script>
 
 </body>
